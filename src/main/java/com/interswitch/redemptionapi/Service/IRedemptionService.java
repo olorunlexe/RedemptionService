@@ -1,0 +1,15 @@
+package com.interswitch.redemptionapi.Service;
+
+import com.interswitch.redemptionapi.Domain.Redemption;
+
+import java.sql.Date;
+
+public interface IRedemptionService {
+    Redemption createRedemption(Redemption redemption);
+
+    Redemption updateRedemption(Redemption redemption);
+
+    Redemption readRedemptionByCode(String code);
+
+    Redemption readRedemptionByDate(Date date);
+}

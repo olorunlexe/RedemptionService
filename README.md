@@ -1,2 +1,2 @@
 # RedemptionService
-Redemption Service API for Voucher Generation project
+Redemption service API for Voucherz Project
