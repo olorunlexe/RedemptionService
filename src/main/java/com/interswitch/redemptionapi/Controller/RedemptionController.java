@@ -33,32 +33,30 @@ public class RedemptionController {
 
     @Autowired
     public RedemptionController(IRedemptionService redemptionService, RabbitTemplate rabbitTemplate,
-                                VoucherReceiver voucherReceiver, Redemption redemption, GiftRedemptionService giftRedemptionService) {
+                                VoucherReceiver voucherReceiver,  GiftRedemptionService giftRedemptionService) {
         this.redemptionService = redemptionService;
         this.rabbitTemplate = rabbitTemplate;
         this.voucherReceiver = voucherReceiver;
-        this.redemption = redemption;
         this.giftRedemptionService = giftRedemptionService;
     }
 
-    @PostMapping
+    @PostMapping(path = "/gift", consumes = "application/json", produces = "application/json")
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public String insertGiftRedemption(@RequestBody @Validated final String code, final long amount) {
-
+    public String insertGiftRedemption(@RequestBody @Validated final Redemption redemption) {
         log.info("Sending message...");
         System.out.println("Sending message...");
-        rabbitTemplate.convertAndSend("spring-amqp-exchange", "q2", code);
+        rabbitTemplate.convertAndSend("gift-exchange", "gift-one", redemption);
         GiftResult receiveGift = voucherReceiver.receiveGiftVoucher();
-        if (receiveGift != null) {
-            giftRedemptionService.redeemGiftVoucher(amount, receiveGift, redemption, rabbitTemplate, redemptionService);
+        if (receiveGift != null && receiveGift.getGiftBalance()>=redemption.getGiftAmountRedeemed()) {
+            giftRedemptionService.redeemGiftVoucher(redemption.getGiftAmountRedeemed(), receiveGift, redemption, rabbitTemplate, redemptionService);
             return "Gift Voucher redeemed Successfully";
         }
         return "no Result Gotten From request!";
     }
 
 
-    @PostMapping
+    @PostMapping(path = "/discount", consumes = "application/json", produces = "application/json")
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     public String insertDiscountRedemption(@RequestBody @Validated final String code) {
@@ -86,7 +84,7 @@ public class RedemptionController {
     }
 
 
-    @PostMapping
+    @PostMapping(path = "/value", consumes = "application/json", produces = "application/json")
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     public String insertValueRedemption(@RequestBody @Validated final String code) {

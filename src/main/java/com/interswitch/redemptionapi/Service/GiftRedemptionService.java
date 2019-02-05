@@ -5,7 +5,9 @@ import com.interswitch.redemptionapi.Domain.Redemption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.stereotype.Service;
 
+@Service
 public class GiftRedemptionService {
     private static final Logger log = LoggerFactory.getLogger(GiftRedemptionService.class);
 
@@ -22,6 +24,6 @@ public class GiftRedemptionService {
 
         long newBalanceForVoucherUpdate = redemption.getGiftBalanceBeforeRedemption() - redemption.getGiftAmountRedeemed();
         receiveGift.setGiftBalance(newBalanceForVoucherUpdate);
-        rabbitTemplate.convertAndSend("spring-amqp-exchange", "q4", receiveGift);
+        rabbitTemplate.convertAndSend("gift-exchange", "gift-three", receiveGift);
     }
 }

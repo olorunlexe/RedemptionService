@@ -15,29 +15,46 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class RedemptionapiApplication {
 
-    static final String EXCHANGE_NAME = "spring-amqp-exchange";
-    static final String QUEUE_SPECIFIC_SENDER = "q1";
-    static final String QUEUE_SPECIFIC_VOUCHER_SENDER = "voucherQueue";
-    static final String QUEUE_SPECIFIC_NAME = "q1";
-    static final String ROUTING_KEY = "q1";
+    static final String GIFT_EXCHANGE_NAME = "gift-exchange";
+    static final String GIFT_ONE="gift-one";
+    static final String GIFT_TWO="gift-two";
+    static final String GIFT_THREE="gift-three";
+
 
     public static void main(String[] args) {
         SpringApplication.run(RedemptionapiApplication.class, args);
     }
 
     @Bean
-    public TopicExchange appExchange() {
-        return new TopicExchange(EXCHANGE_NAME);
+    public TopicExchange giftExchange() {
+        return new TopicExchange(GIFT_EXCHANGE_NAME);
     }
 
     @Bean
-    public Queue appQueueSpecific() {
-        return new Queue(QUEUE_SPECIFIC_NAME);
+    public Queue giftQueueOne() {
+        return new Queue(GIFT_ONE);
     }
 
     @Bean
-    public Binding declareBindingSpecific() {
-        return BindingBuilder.bind(appQueueSpecific()).to(appExchange()).with(ROUTING_KEY);
+    public Queue giftQueueTwo() {
+        return new Queue(GIFT_TWO);
+    }
+    @Bean
+    public Queue giftQueueThree() {
+        return new Queue(GIFT_THREE);
+    }
+
+    @Bean
+    public Binding BindingGiftOne() {
+        return BindingBuilder.bind(giftQueueOne()).to(giftExchange()).with("gift-one");
+    }
+    @Bean
+    public Binding BindingGiftTwo() {
+        return BindingBuilder.bind(giftQueueTwo()).to(giftExchange()).with("gift-two");
+    }
+    @Bean
+    public Binding BindingGiftThree() {
+        return BindingBuilder.bind(giftQueueThree()).to(giftExchange()).with("gift-three");
     }
 
     @Bean
