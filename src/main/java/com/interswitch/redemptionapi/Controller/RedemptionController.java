@@ -1,6 +1,8 @@
 package com.interswitch.redemptionapi.Controller;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.interswitch.redemptionapi.Domain.DiscountResult;
 import com.interswitch.redemptionapi.Domain.GiftResult;
 import com.interswitch.redemptionapi.Domain.Redemption;
@@ -13,9 +15,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+
+import java.io.IOException;
 
 
 @Controller
@@ -43,11 +49,16 @@ public class RedemptionController {
     @PostMapping(path = "/gift", consumes = "application/json", produces = "application/json")
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public String insertGiftRedemption(@RequestBody @Validated final Redemption redemption) {
+    public String insertGiftRedemption(@RequestBody @Validated final Redemption redemption) throws IOException {
         log.info("Sending message...");
         System.out.println("Sending message...");
-        rabbitTemplate.convertAndSend("gift-exchange", "gift-one", redemption);
-        GiftResult receiveGift = voucherReceiver.receiveGiftVoucher();
+        final String uri = "http://localhost:63745/api/v1/gift/" + redemption.getCode();
+        RestTemplate restTemplate = new RestTemplate();
+        GiftResult receiveGift = restTemplate.getForObject(uri, GiftResult.class);
+        ResponseEntity<String> response
+                = restTemplate.getForEntity(uri, String.class);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(response.getBody());
         if (receiveGift != null && receiveGift.getGiftBalance()>=redemption.getGiftAmountRedeemed()) {
             giftRedemptionService.redeemGiftVoucher(redemption.getGiftAmountRedeemed(), receiveGift, redemption, rabbitTemplate, redemptionService);
             return "Gift Voucher redeemed Successfully";
