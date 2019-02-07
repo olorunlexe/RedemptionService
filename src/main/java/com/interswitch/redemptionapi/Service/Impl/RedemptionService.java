@@ -1,7 +1,8 @@
-package com.interswitch.redemptionapi.Service;
+package com.interswitch.redemptionapi.Service.Impl;
 
 import com.interswitch.redemptionapi.Domain.Redemption;
 import com.interswitch.redemptionapi.Repository.IRedemptionRepository;
+import com.interswitch.redemptionapi.Service.IRedemptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
