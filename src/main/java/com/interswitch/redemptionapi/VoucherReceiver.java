@@ -2,7 +2,6 @@ package com.interswitch.redemptionapi;
 
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.TreeTraversingParser;
 import com.interswitch.redemptionapi.Domain.DiscountResult;
 import com.interswitch.redemptionapi.Domain.GiftResult;
 import com.interswitch.redemptionapi.Domain.ValueResult;
@@ -24,15 +23,15 @@ public class VoucherReceiver {
 
     public VoucherReceiver(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
-        this.messageConverter=rabbitTemplate.getMessageConverter();
+        this.messageConverter = rabbitTemplate.getMessageConverter();
     }
 
     public GiftResult receiveGiftVoucher() {
         log.info("receive Gift Voucher Details from  VoucherApi");
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
-        GiftResult giftResult = mapper.convertValue(rabbitTemplate.receiveAndConvert("gift-two"),GiftResult.class);
-       return giftResult;
+        GiftResult giftResult = mapper.convertValue(rabbitTemplate.receiveAndConvert("gift-two"), GiftResult.class);
+        return giftResult;
     }
 
     public DiscountResult receiveDiscountVoucher() {

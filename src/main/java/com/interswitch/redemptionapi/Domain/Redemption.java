@@ -3,7 +3,6 @@ package com.interswitch.redemptionapi.Domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.sql.Date;
 
 
@@ -22,7 +21,7 @@ public class Redemption {
     private float discountPercentRedeemed;
     private long valueAmountRedeemed;
 
-    public Redemption(@JsonProperty("id") long id, @JsonProperty("code") String code, @JsonProperty("merchantId") String merchantId,@JsonProperty("datetime") Date datetime,@JsonProperty("voucherType") String voucherType,@JsonProperty("giftBalanceBeforeRedemption") long giftBalanceBeforeRedemption,@JsonProperty("giftAmountRedeemed") long giftAmountRedeemed,@JsonProperty("discountAmountRedeemed") long discountAmountRedeemed,@JsonProperty("discountUnitRedeemed") long discountUnitRedeemed,@JsonProperty("discountPercentRedeemed") float discountPercentRedeemed,@JsonProperty("valueAmountRedeemed") long valueAmountRedeemed) {
+    public Redemption(@JsonProperty("id") long id, @JsonProperty("code") String code, @JsonProperty("merchantId") String merchantId, @JsonProperty("datetime") Date datetime, @JsonProperty("voucherType") String voucherType, @JsonProperty("giftBalanceBeforeRedemption") long giftBalanceBeforeRedemption, @JsonProperty("giftAmountRedeemed") long giftAmountRedeemed, @JsonProperty("discountAmountRedeemed") long discountAmountRedeemed, @JsonProperty("discountUnitRedeemed") long discountUnitRedeemed, @JsonProperty("discountPercentRedeemed") float discountPercentRedeemed, @JsonProperty("valueAmountRedeemed") long valueAmountRedeemed) {
         this.id = id;
         this.code = code;
         this.merchantId = merchantId;

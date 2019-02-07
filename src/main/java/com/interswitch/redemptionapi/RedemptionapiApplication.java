@@ -11,14 +11,15 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class RedemptionapiApplication {
 
     static final String GIFT_EXCHANGE_NAME = "gift-exchange";
-    static final String GIFT_ONE="gift-one";
-    static final String GIFT_TWO="gift-two";
-    static final String GIFT_THREE="gift-three";
+    static final String GIFT_ONE = "gift-one";
+    static final String GIFT_TWO = "gift-two";
+    static final String GIFT_THREE = "gift-three";
 
 
     public static void main(String[] args) {
@@ -39,6 +40,7 @@ public class RedemptionapiApplication {
     public Queue giftQueueTwo() {
         return new Queue(GIFT_TWO);
     }
+
     @Bean
     public Queue giftQueueThree() {
         return new Queue(GIFT_THREE);
@@ -48,10 +50,12 @@ public class RedemptionapiApplication {
     public Binding BindingGiftOne() {
         return BindingBuilder.bind(giftQueueOne()).to(giftExchange()).with("gift-one");
     }
+
     @Bean
     public Binding BindingGiftTwo() {
         return BindingBuilder.bind(giftQueueTwo()).to(giftExchange()).with("gift-two");
     }
+
     @Bean
     public Binding BindingGiftThree() {
         return BindingBuilder.bind(giftQueueThree()).to(giftExchange()).with("gift-three");
@@ -67,6 +71,11 @@ public class RedemptionapiApplication {
     @Bean
     public Jackson2JsonMessageConverter producerJackson2MessageConverter() {
         return new Jackson2JsonMessageConverter();
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
 }

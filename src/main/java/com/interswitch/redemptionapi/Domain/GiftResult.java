@@ -10,14 +10,14 @@ import java.sql.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GiftResult implements Serializable {
     private long id;
-    private String Code;
-    private String MerchantId;
-    private String VoucherStatus;
-    private Date ExpiryDate;
-    private Date CreationDate;
-    private String VoucherType;
-    private String Metadata;
-    private String Description;
+    private String code;
+    private String merchantId;
+    private String voucherStatus;
+    private Date expiryDate;
+    private Date creationDate;
+    private String voucherType;
+    private String metadata;
+    private String description;
     private long giftBalance;
     private long giftAmount;
 }

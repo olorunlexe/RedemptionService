@@ -10,13 +10,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class GiftRedemptionService {
     private static final Logger log = LoggerFactory.getLogger(GiftRedemptionService.class);
+    private RabbitTemplate rabbitTemplate;
+    private RedemptionService redemptionService;
 
-    public void redeemGiftVoucher(long amount, GiftResult receiveGift, Redemption redemption, RabbitTemplate rabbitTemplate, IRedemptionService redemptionService) {
+    public GiftRedemptionService(RabbitTemplate rabbitTemplate, RedemptionService redemptionService) {
+        this.rabbitTemplate = rabbitTemplate;
+        this.redemptionService = redemptionService;
+    }
+
+    public void redeemGiftVoucher(GiftResult receiveGift, Redemption redemption) {
         // Use Amount and GiftBalance to make necessary deductions and
         // the Insert into Redemption table or Update the existing value if still valid
 
         redemption.setGiftBalanceBeforeRedemption(receiveGift.getGiftBalance());
-        redemption.setGiftAmountRedeemed(amount);
         redemption.setVoucherType(receiveGift.getVoucherType());
         redemption.setMerchantId(receiveGift.getMerchantId());
         log.info("Creating redemption" + redemption.toString());
@@ -24,6 +30,6 @@ public class GiftRedemptionService {
 
         long newBalanceForVoucherUpdate = redemption.getGiftBalanceBeforeRedemption() - redemption.getGiftAmountRedeemed();
         receiveGift.setGiftBalance(newBalanceForVoucherUpdate);
-        rabbitTemplate.convertAndSend("gift-exchange", "gift-three", receiveGift);
+        rabbitTemplate.convertAndSend("gift-exchange", "gift-two", receiveGift);
     }
 }

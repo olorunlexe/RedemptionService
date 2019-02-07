@@ -11,5 +11,9 @@ public class ValueResult {
     private String merchantId;
     private Date datetime;
     private String voucherType;
+    private Date expiryDate;
+    private Date creationDate;
+    private String metadata;
+    private String description;
     private long valueAmount;
 }
