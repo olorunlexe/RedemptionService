@@ -5,10 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.List;
+import java.util.Map;
 
 
 @Repository
@@ -31,4 +35,13 @@ public class RedemptionRepository extends BaseRepository<Redemption> {
                 .returningResultSet(SINGLE_RESULT, new BeanPropertyRowMapper<>(Redemption.class));
     }
 
+    public Redemption findByCode(String code) {
+        SqlParameterSource in = new MapSqlParameterSource().addValue("code", code);
+        Map<String, Object> m = findByCode.execute(in);
+        List<Redemption> list = (List<Redemption>) m.get(SINGLE_RESULT);
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
 }

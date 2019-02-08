@@ -2,7 +2,8 @@ package com.interswitch.redemptionapi.Service;
 
 import com.interswitch.redemptionapi.Domain.Redemption;
 
-import java.sql.Date;
+import java.util.Date;
+
 
 public interface IRedemptionService {
     Redemption createRedemption(Redemption redemption);

@@ -3,7 +3,7 @@ package com.interswitch.redemptionapi.Repository;
 
 import com.interswitch.redemptionapi.Domain.Redemption;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 public interface IRedemptionRepository<T extends Redemption> {

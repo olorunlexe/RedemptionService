@@ -14,11 +14,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.sql.Date;
-
+import java.util.Date;
 
 @Controller
-@RequestMapping("/api/v1")
+@RequestMapping("/redemption/v1")
 public class RedemptionController {
 
 
@@ -42,20 +41,28 @@ public class RedemptionController {
     }
 
 
-    @PostMapping(path = "/discount", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/discount/{code}", produces = "application/json")
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public String insertDiscountRedemption(@RequestBody @Validated final String code) {
-        if (redeemVoucher.redeemDiscountVoucher(code)) return "Discount Voucher redeemed Successfully";
+    public String insertDiscountRedemption(@PathVariable("code") String code) {
+        if (redeemVoucher.redeemDiscountVoucher(code)) {
+            log.info("Discount voucher with Code: " + code + "redeemed successfully");
+            return "Discount Voucher redeemed Successfully";
+        }
+        log.error("Value Voucher" + code + "Not Reedeemed");
         return "no Result Gotten From request!";
     }
 
 
-    @PostMapping(path = "/value", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/value/{code}", produces = "application/json")
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public String insertValueRedemption(@RequestBody @Validated final String code) {
-        if (redeemVoucher.redeemValueVoucher(code)) return "Value Voucher redeemed Successfully";
+    public String insertValueRedemption(@PathVariable("code") String code) {
+        if (redeemVoucher.redeemValueVoucher(code)) {
+            log.info("Value voucher with Code: " + code + "redeemed successfully");
+            return "Value Voucher redeemed Successfully";
+        }
+        log.error("Value Voucher" + code + "Not Reedeemed");
         return "no Result Gotten From request!";
     }
 
@@ -70,7 +77,7 @@ public class RedemptionController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public Redemption readRedemptionByCode(@RequestBody Date date) {
+    public Redemption readRedemptionByDate(@RequestBody Date date) {
         Redemption redemption = redemptionService.readRedemptionByDate(date);
         return redemption;
     }

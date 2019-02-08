@@ -27,11 +27,12 @@ public class GiftRedemptionService implements IGiftRedemptionService {
         redemption.setGiftBalanceBeforeRedemption(receiveGift.getGiftBalance());
         redemption.setVoucherType(receiveGift.getVoucherType());
         redemption.setMerchantId(receiveGift.getMerchantId());
-        log.info("Creating redemption" + redemption.toString());
         redemptionService.createRedemption(redemption);
+        log.info("Creating redemption" + redemption.toString());
 
-        long newBalanceForVoucherUpdate = redemption.getGiftBalanceBeforeRedemption() - redemption.getGiftAmountRedeemed();
+        long newBalanceForVoucherUpdate = receiveGift.getGiftBalance() - redemption.getGiftAmountRedeemed();
         receiveGift.setGiftBalance(newBalanceForVoucherUpdate);
         rabbitTemplate.convertAndSend("gift-exchange", "gift-two", receiveGift);
+        log.info("Redeemed ValueObject published" + redemption.toString());
     }
 }

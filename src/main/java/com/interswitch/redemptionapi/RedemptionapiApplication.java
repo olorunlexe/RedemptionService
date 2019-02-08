@@ -1,5 +1,6 @@
 package com.interswitch.redemptionapi;
 
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import lombok.var;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -10,7 +11,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
@@ -71,6 +74,16 @@ public class RedemptionapiApplication {
     @Bean
     public Jackson2JsonMessageConverter producerJackson2MessageConverter() {
         return new Jackson2JsonMessageConverter();
+    }
+
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
+        return new Jackson2ObjectMapperBuilderCustomizer() {
+            @Override
+            public void customize(Jackson2ObjectMapperBuilder builder) {
+                builder.dateFormat(new ISO8601DateFormat());
+            }
+        };
     }
 
     @Bean

@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 
 import javax.sql.DataSource;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
